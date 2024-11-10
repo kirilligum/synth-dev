@@ -16,15 +16,21 @@ async def extract_code_and_cli(input: InputParams_extract_code_and_cli):
     try:
         log.info("extract_code_and_cli function started", input=input)
         
-        # Extract Python code
-        python_code_start = input.extract_use_case_result.find("<python>") + len("<python>")
-        python_code_end = input.extract_use_case_result.find("</python>")
-        python_code = input.extract_use_case_result[python_code_start:python_code_end].strip()
+        # Extract the longest Python code block
+        python_code_blocks = input.extract_use_case_result.split("<python>")
+        python_code = max(
+            (block.split("</python>")[0].strip() for block in python_code_blocks if "</python>" in block),
+            key=len,
+            default=""
+        )
 
-        # Extract CLI command
-        cli_start = input.extract_use_case_result.find("<cli>") + len("<cli>")
-        cli_end = input.extract_use_case_result.find("</cli>")
-        cli_command = input.extract_use_case_result[cli_start:cli_end].strip()
+        # Extract the longest CLI command block
+        cli_blocks = input.extract_use_case_result.split("<cli>")
+        cli_command = max(
+            (block.split("</cli>")[0].strip() for block in cli_blocks if "</cli>" in block),
+            key=len,
+            default=""
+        )
 
         log.info("extract_code_and_cli function completed", python_code=python_code, cli_command=cli_command)
         return {"python_code": python_code, "cli_command": cli_command}
