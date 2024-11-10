@@ -63,7 +63,7 @@ if st.button("Generate Examples"):
         st.warning("Please enter a prompt before submitting.")
 
 if st.session_state.clean_html:
-    st.markdown(st.session_state.clean_html)
+    st.text(st.session_state.clean_html)
 
 # Display response history
 if st.session_state.response_history:
