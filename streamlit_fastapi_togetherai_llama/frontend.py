@@ -72,7 +72,7 @@ if "approved" not in st.session_state:
     st.session_state.approve = False
 
 if "rag" not in st.session_state:
-    st.session_state.rag = ""
+    st.session_state.rag = "rag.json"
 
 # Create button to send request
 if st.button("approve"):
