@@ -64,6 +64,7 @@ if st.button("Generate Examples"):
                     "extract_use_case_results": response.json()[
                         "extract_use_case_results"
                     ],
+                    "code_and_cli_results": response.json()["code_and_cli_results"],
                 })
             else:
                 st.error(f"Error: {response.status_code}")
@@ -97,9 +98,7 @@ if st.session_state.response_history:
             )
         # Add a new expander for code_and_cli_results
         with st.expander("Code and CLI"):
-            st.text(
-                f"**code_and_cli_result {i}:** {item['code_and_cli_results'][0]}"
-            )
+            st.text(f"**code_and_cli_result {i}:** {item['code_and_cli_results'][0]}")
         st.markdown("---")
 
 st.header("Human review")
