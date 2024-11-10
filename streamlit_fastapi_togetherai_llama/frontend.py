@@ -7,9 +7,10 @@ st.title("Restack AI with TogetherAi + LlamaIndex")
 # Create text area for user input with session state
 if "user_input" not in st.session_state:
     st.session_state.user_input = ""
+    st.session_state.url_input = ""
 
+url = st.text_area("Enter the URL to download and clean", height=96, key="url_input")
 user_prompt = st.text_area("Ask the pirate any question", height=150, key="user_input")
-url_input = st.text_input("Enter the URL to download and clean", key="url_input")
 
 # Initialize response history in session state
 if "response_history" not in st.session_state:
@@ -22,21 +23,24 @@ if st.button("Generate Response"):
             # Make POST request to FastAPI backend
             response = requests.post(
                 "http://localhost:8000/api/schedule",
-                json={"prompt": user_prompt, "url": url_input}
+                json={"prompt": user_prompt, "url": url},
             )
-            
+
             if response.status_code == 200:
                 st.success("Response received!")
                 # Add the new response to history with the original prompt
                 st.session_state.response_history.append({
                     "prompt": user_prompt,
-                    "response": response.json()["result"]
+                    "url": url,
+                    "response": response.json()["result"],
                 })
             else:
                 st.error(f"Error: {response.status_code}")
-                
+
         except requests.exceptions.ConnectionError:
-            st.error("Failed to connect to the server. Make sure the FastAPI server is running.")
+            st.error(
+                "Failed to connect to the server. Make sure the FastAPI server is running."
+            )
     else:
         st.warning("Please enter a prompt before submitting.")
 
