@@ -12,8 +12,6 @@ with import_functions():
         InputParams_brainstorm_use_cases,
         extract_use_case,
         InputParams_extract_use_case,
-        extract_use_case,
-        InputParams_extract_use_case,
         extract_code_and_cli,
         InputParams_extract_code_and_cli,
     )
@@ -72,19 +70,17 @@ class llm_complete_workflow:
             )
             extract_use_case_results.append(extract_use_case_result)
 
-        # result = await workflow.step(
-        #     create_use_case,
-        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
-        #     start_to_close_timeout=timedelta(seconds=120),
-        # )
-        # log.info("brainstorm_use_cases completed", result=result)
-
-        # result = await workflow.step(
-        #     create_use_case,
-        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
-        #     start_to_close_timeout=timedelta(seconds=120),
-        # )
-        # log.info("brainstorm_use_cases completed", result=result)
+        code_and_cli_results = []
+        for extract_use_case_result in extract_use_case_results:
+            code_and_cli_result = await workflow.step(
+                extract_code_and_cli,
+                InputParams_extract_code_and_cli(
+                    extract_use_case_result=extract_use_case_result
+                ),
+                start_to_close_timeout=timedelta(seconds=60),
+            )
+            log.info("extract_code_and_cli completed", result=code_and_cli_result)
+            code_and_cli_results.append(code_and_cli_result)
 
         # result = await workflow.step(
         #     run_use_case,
@@ -120,16 +116,6 @@ class llm_complete_workflow:
         #     start_to_close_timeout=timedelta(seconds=120),
         # )
         # log.info("brainstorm_use_cases completed", result=result)
-
-        code_and_cli_results = []
-        for extract_use_case_result in extract_use_case_results:
-            code_and_cli_result = await workflow.step(
-                extract_code_and_cli,
-                InputParams_extract_code_and_cli(extract_use_case_result=extract_use_case_result),
-                start_to_close_timeout=timedelta(seconds=60),
-            )
-            log.info("extract_code_and_cli completed", result=code_and_cli_result)
-            code_and_cli_results.append(code_and_cli_result)
 
         return (
             cleaned_html,
