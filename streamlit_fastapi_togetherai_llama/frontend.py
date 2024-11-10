@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Set page title and header
-st.title("Synth Dev")
+st.title("Synth Dev 🎹")
 
 st.header("Input Documentation and Requirements")
 # Create text area for user input with session state
