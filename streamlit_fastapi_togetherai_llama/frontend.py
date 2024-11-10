@@ -92,10 +92,11 @@ if st.session_state.response_history:
             st.markdown(
                 f"**brainstorm_use_cases_result {i}:** {item['brainstorm_use_cases_result']}"
             )
-        with st.expander("usecase"):
-            st.text(
-                f"**extract_use_case_result {i}:** {item['extract_use_case_results'][0]}"
-            )
+        for j in range(5):
+            with st.expander(f"usecase {j+1}"):
+                st.text(
+                    f"**extract_use_case_result {j+1}:** {item['extract_use_case_results'][j]}"
+                )
         # Add a new expander for code_and_cli_results
         with st.expander("Code and CLI"):
             code_and_cli = item['code_and_cli_results'][0]
