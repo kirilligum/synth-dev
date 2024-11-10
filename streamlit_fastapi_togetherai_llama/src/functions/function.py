@@ -3,6 +3,8 @@ from restack_ai.function import function, log, FunctionFailure, log
 from llama_index.core.llms import ChatMessage, MessageRole
 import os
 from dataclasses import dataclass
+import requests
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,8 +33,15 @@ async def llm_complete(input: FunctionInputParams):
             ChatMessage(role=MessageRole.USER, content=input.prompt),
         ]
         resp = llm.chat(messages)
-        log.info("llm_complete function completed", response=resp.message.content)
-        return resp.message.content
+        
+        # Download and parse the URL
+        url = "https://docs.llamaindex.ai/en/stable/examples/llm/together/"
+        response = requests.get(url)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        parsed_content = soup.get_text()
+
+        log.info("llm_complete function completed", response=resp.message.content, parsed_content=parsed_content)
+        return resp.message.content + "\n\nParsed Content:\n" + parsed_content
     except Exception as e:
         log.error("llm_complete function failed", error=e)
         raise e
