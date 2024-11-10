@@ -48,6 +48,7 @@ async def schedule_workflow(request: PromptRequest):
             understand_documentation_result,
             brainstorm_use_cases_result,
             extract_use_case_results,
+            code_and_cli_results,
         ) = await client.get_workflow_result(workflow_id=workflow_id, run_id=runId)
         print(
             "\nclean_html:",
