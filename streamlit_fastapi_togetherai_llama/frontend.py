@@ -74,6 +74,9 @@ if "approved" not in st.session_state:
 # Create button to send request
 if st.button("approve"):
     st.session_state.approve = True
+
+# Display the current state of 'approve'
+st.write("Approve state:", st.session_state.approve)
     # if user_prompt:
     #     try:
     #         # Make POST request to FastAPI backend
