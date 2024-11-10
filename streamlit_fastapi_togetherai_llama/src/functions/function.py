@@ -1,7 +1,20 @@
-def download_and_clean_html(url):
-    response = requests.get(url)
-    cleaned_html = remove_script_css(response.content)
-    return cleaned_html
+from restack_ai.function import function, log, FunctionFailure
+
+@dataclass
+class DownloadInputParams:
+    url: str
+
+@function.defn(name="download_and_clean_html")
+async def download_and_clean_html(input: DownloadInputParams):
+    try:
+        log.info("download_and_clean_html function started", input=input)
+        response = requests.get(input.url)
+        cleaned_html = remove_script_css(response.content)
+        log.info("download_and_clean_html function completed", cleaned_html=cleaned_html)
+        return cleaned_html
+    except Exception as e:
+        log.error("download_and_clean_html function failed", error=e)
+        raise e
 
 from llama_index.llms.together import TogetherLLM
 from restack_ai.function import function, log, FunctionFailure, log
@@ -44,14 +57,9 @@ async def llm_complete(input: FunctionInputParams):
         ]
         resp = llm.chat(messages)
 
-        # Download and parse the URL
+        # Download and clean the URL
         url = "https://docs.llamaindex.ai/en/stable/examples/llm/together/"
-        response = requests.get(url)
-        # soup = BeautifulSoup(response.content, "html.parser")
-        # parsed_content = soup.get_text()
-        # Clean up the HTML content
-
-        cleaned_html = remove_script_css(response.content)
+        cleaned_html = await download_and_clean_html(DownloadInputParams(url=url))
 
         log.info(
             "llm_complete function completed",
