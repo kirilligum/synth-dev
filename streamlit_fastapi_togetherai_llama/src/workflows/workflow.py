@@ -62,7 +62,10 @@ class llm_complete_workflow:
                 ),
                 start_to_close_timeout=timedelta(seconds=120),
             )
-            log.info(f"extract_use_case {i_use_case} completed", result=extract_use_case_result)
+            log.info(
+                f"extract_use_case {i_use_case} completed",
+                result=extract_use_case_result,
+            )
             extract_use_case_results.append(extract_use_case_result)
 
         # result = await workflow.step(
@@ -118,5 +121,5 @@ class llm_complete_workflow:
             cleaned_html,
             understand_documentation_result,
             brainstorm_use_cases_result,
-            extract_use_case_result,
+            extract_use_case_results,
         )

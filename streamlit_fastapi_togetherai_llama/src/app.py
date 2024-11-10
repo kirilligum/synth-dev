@@ -43,12 +43,29 @@ async def schedule_workflow(request: PromptRequest):
         )
         print("Scheduled workflow", runId)
 
-        clean_html, result = await client.get_workflow_result(
-            workflow_id=workflow_id, run_id=runId
+        (
+            clean_html,
+            understand_documentation_result,
+            brainstorm_use_cases_result,
+            extract_use_case_results,
+        ) = await client.get_workflow_result(workflow_id=workflow_id, run_id=runId)
+        print(
+            "\nclean_html:",
+            clean_html[:20],
+            "\nunderstand_documentation_result:",
+            understand_documentation_result,
+            "\nbrainstorm_use_cases_result:",
+            brainstorm_use_cases_result,
+            "\nextract_use_case_result:",
+            extract_use_case_results,
         )
-        print("clean_html:", clean_html[:20], "    result:", result)
 
-        return {"clean_html": clean_html, "result": result}
+        return {
+            "clean_html": clean_html,
+            "understand_documentation_result": understand_documentation_result,
+            "brainstorm_use_cases_result": brainstorm_use_cases_result,
+            "extract_use_case_results": extract_use_case_results,
+        }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
