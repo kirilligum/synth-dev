@@ -9,7 +9,7 @@ if "user_input" not in st.session_state:
     st.session_state.user_input = ""
     st.session_state.url_input = ""
 
-url = st.text_area("Enter the URL to download and clean", height=96, key="url_input")
+url = st.text_area("Enter the URL to download and clean", height=96, key="url_input", value="https://docs.llamaindex.ai/en/stable/examples/llm/together/")
 user_prompt = st.text_area("Ask the pirate any question", height=150, key="user_input")
 
 # Initialize response history in session state
