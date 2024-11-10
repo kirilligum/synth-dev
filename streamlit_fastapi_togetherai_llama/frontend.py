@@ -4,26 +4,34 @@ import requests
 # Set page title and header
 st.title("Synth Dev")
 
+st.header("Input Documentation and Requirements")
 # Create text area for user input with session state
+if "url_input" not in st.session_state:
+    st.session_state.url_input = (
+        "https://docs.llamaindex.ai/en/stable/examples/llm/together/"
+    )
 if "user_input" not in st.session_state:
-    st.session_state.user_input = ""
-    st.session_state.url_input = ""
+    st.session_state.user_input = "Tell me a short dark joke AI coding assistants"
 
 url = st.text_area(
     "Enter the URL of your development documentation",
     height=96,
     key="url_input",
-    value="https://docs.llamaindex.ai/en/stable/examples/llm/together/",
+    value=st.session_state.url_input,
 )
 user_prompt = st.text_area(
-    "Prompt for the additional requests. For example, focusing on a specific usecase or library or target audience",
+    "Prompt for the additional requirements. For example, focusing on a specific usecase or library or target audience",
     height=150,
     key="user_input",
+    value=st.session_state.user_input,
 )
 
 # Initialize response history in session state
 if "response_history" not in st.session_state:
     st.session_state.response_history = []
+
+if "clean_html" not in st.session_state:
+    st.session_state.clean_html = ""
 
 # Create button to send request
 if st.button("Generate Examples"):
@@ -37,6 +45,7 @@ if st.button("Generate Examples"):
 
             if response.status_code == 200:
                 st.success("Response received!")
+                st.session_state.clean_html = response.json()["clean_html"]
                 # Add the new response to history with the original prompt
                 st.session_state.response_history.append({
                     "prompt": user_prompt,
@@ -53,6 +62,9 @@ if st.button("Generate Examples"):
     else:
         st.warning("Please enter a prompt before submitting.")
 
+if st.session_state.clean_html:
+    st.markdown(st.session_state.clean_html)
+
 # Display response history
 if st.session_state.response_history:
     st.subheader("Response History")
@@ -60,6 +72,13 @@ if st.session_state.response_history:
         st.markdown(f"**Prompt {i}:** {item['prompt']}")
         st.markdown(f"**Response {i}:** {item['response']}")
         st.markdown("---")
+
+st.header("Human review")
+
+st.markdown(
+    "Please review the examples and provide feedback on the use cases and code examples"
+)
+st.markdown("examples for review")
 
 if "use_cases" not in st.session_state:
     st.session_state.use_cases = []
@@ -111,5 +130,5 @@ if st.button("Approve Examples"):
 # Display the current state of 'approve'
 st.write("Approve state:", st.session_state.approve)
 
-st.subheader("RAG")
+st.header("RAG")
 st.write("RAG:", st.session_state.rag)
