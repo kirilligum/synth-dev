@@ -40,6 +40,7 @@ async def schedule_workflow(request: PromptRequest):
             workflow_name="llm_complete_workflow",
             workflow_id=workflow_id,
             input={"url": request.url, "prompt": request.prompt},
+            code_and_cli_results,
         )
         print("Scheduled workflow", runId)
 
@@ -65,6 +66,7 @@ async def schedule_workflow(request: PromptRequest):
             "understand_documentation_result": understand_documentation_result,
             "brainstorm_use_cases_result": brainstorm_use_cases_result,
             "extract_use_case_results": extract_use_case_results,
+            "code_and_cli_results": code_and_cli_results,
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
