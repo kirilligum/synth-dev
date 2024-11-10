@@ -1,3 +1,8 @@
+def download_and_clean_html(url):
+    response = requests.get(url)
+    cleaned_html = remove_script_css(response.content)
+    return cleaned_html
+
 from llama_index.llms.together import TogetherLLM
 from restack_ai.function import function, log, FunctionFailure, log
 from llama_index.core.llms import ChatMessage, MessageRole
