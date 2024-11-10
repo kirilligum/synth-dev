@@ -95,6 +95,11 @@ if st.session_state.response_history:
             st.text(
                 f"**extract_use_case_result {i}:** {item['extract_use_case_results'][0]}"
             )
+        # Add a new expander for code_and_cli_results
+        with st.expander("Code and CLI"):
+            st.text(
+                f"**code_and_cli_result {i}:** {item['code_and_cli_results'][0]}"
+            )
         st.markdown("---")
 
 st.header("Human review")
