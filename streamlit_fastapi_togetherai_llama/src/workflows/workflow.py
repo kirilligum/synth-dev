@@ -51,18 +51,19 @@ class llm_complete_workflow:
         )
         log.info("brainstorm_use_cases completed", result=brainstorm_use_cases_result)
 
-        i_use_case = 0
-
-        extract_use_case_result = await workflow.step(
-            extract_use_case,
-            InputParams_extract_use_case(
-                cleaned_html=cleaned_html,
-                brainstorm_use_cases_result=brainstorm_use_cases_result,
-                i_use_case=i_use_case,
-            ),
-            start_to_close_timeout=timedelta(seconds=120),
-        )
-        log.info("extract_use_case completed", result=extract_use_case_result)
+        extract_use_case_results = []
+        for i_use_case in range(5):
+            extract_use_case_result = await workflow.step(
+                extract_use_case,
+                InputParams_extract_use_case(
+                    cleaned_html=cleaned_html,
+                    brainstorm_use_cases_result=brainstorm_use_cases_result,
+                    i_use_case=i_use_case,
+                ),
+                start_to_close_timeout=timedelta(seconds=120),
+            )
+            log.info(f"extract_use_case {i_use_case} completed", result=extract_use_case_result)
+            extract_use_case_results.append(extract_use_case_result)
 
         # result = await workflow.step(
         #     create_use_case,
