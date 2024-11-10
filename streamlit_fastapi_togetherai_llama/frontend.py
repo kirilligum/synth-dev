@@ -11,13 +11,18 @@ if "url_input" not in st.session_state:
         "https://docs.llamaindex.ai/en/stable/examples/llm/together/"
     )
 if "user_input" not in st.session_state:
-    st.session_state.user_input = "Tell me a short dark joke AI coding assistants"
+    st.session_state.user_input = (
+        """make sure you use both: LlamaIndex and TogetherAI"""
+    )
 
 url = st.text_area(
     "Enter the URL of your development documentation",
     height=96,
     key="url_input",
     value=st.session_state.url_input,
+)
+st.markdown(
+    "Our agents will extract useful concepts from the documentation and create use cases."
 )
 user_prompt = st.text_area(
     "Prompt for the additional requirements. For example, focusing on a specific usecase or library or target audience",
@@ -35,7 +40,7 @@ if "clean_html" not in st.session_state:
 
 # Create button to send request
 if st.button("Generate Examples"):
-    if user_prompt:
+    if url:
         try:
             # Make POST request to FastAPI backend
             response = requests.post(
@@ -50,7 +55,15 @@ if st.button("Generate Examples"):
                 st.session_state.response_history.append({
                     "prompt": user_prompt,
                     "url": url,
-                    "response": response.json()["result"],
+                    "understand_documentation_result": response.json()[
+                        "understand_documentation_result"
+                    ],
+                    "brainstorm_use_cases_result": response.json()[
+                        "brainstorm_use_cases_result"
+                    ],
+                    "extract_use_case_results": response.json()[
+                        "extract_use_case_results"
+                    ],
                 })
             else:
                 st.error(f"Error: {response.status_code}")
@@ -67,10 +80,20 @@ if st.session_state.clean_html:
 
 # Display response history
 if st.session_state.response_history:
-    st.subheader("Response History")
+    st.subheader("Understand Documentation and Brainstorm Use Cases")
     for i, item in enumerate(st.session_state.response_history, 1):
-        st.markdown(f"**Prompt {i}:** {item['prompt']}")
-        st.markdown(f"**Response {i}:** {item['response']}")
+        st.subheader("understand")
+        st.markdown(
+            f"**understand_documentation_result {i}:** {item['understand_documentation_result']}"
+        )
+        st.subheader("brainstorm")
+        st.markdown(
+            f"**brainstorm_use_cases_result {i}:** {item['brainstorm_use_cases_result']}"
+        )
+        st.subheader("usecase")
+        st.text(
+            f"**extract_use_case_result {i}:** {item['extract_use_case_results'][0]}"
+        )
         st.markdown("---")
 
 st.header("Human review")
