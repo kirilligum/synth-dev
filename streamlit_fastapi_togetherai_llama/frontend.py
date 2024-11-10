@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Set page title and header
-st.title("")
+st.title("Synth Dev")
 
 # Create text area for user input with session state
 if "user_input" not in st.session_state:
@@ -10,19 +10,23 @@ if "user_input" not in st.session_state:
     st.session_state.url_input = ""
 
 url = st.text_area(
-    "Enter the URL to download and clean",
+    "Enter the URL of your development documentation",
     height=96,
     key="url_input",
     value="https://docs.llamaindex.ai/en/stable/examples/llm/together/",
 )
-user_prompt = st.text_area("Ask the pirate any question", height=150, key="user_input")
+user_prompt = st.text_area(
+    "Prompt for the additional requests. For example, focusing on a specific usecase or library or target audience",
+    height=150,
+    key="user_input",
+)
 
 # Initialize response history in session state
 if "response_history" not in st.session_state:
     st.session_state.response_history = []
 
 # Create button to send request
-if st.button("Generate Response"):
+if st.button("Generate Examples"):
     if user_prompt:
         try:
             # Make POST request to FastAPI backend
@@ -72,10 +76,10 @@ if "approved" not in st.session_state:
     st.session_state.approve = False
 
 if "rag" not in st.session_state:
-    st.session_state.rag = "rag.json"
+    st.session_state.rag = "None"
 
 # Create button to send request
-if st.button("approve"):
+if st.button("Approve Examples"):
     st.session_state.approve = True
     st.session_state.rag = "rag.json"
     # if user_prompt:
@@ -107,4 +111,5 @@ if st.button("approve"):
 # Display the current state of 'approve'
 st.write("Approve state:", st.session_state.approve)
 
-st.write("RAG:", st.session_state.approve)
+st.h1("RAG")
+st.write("RAG:", st.session_state.rag)
