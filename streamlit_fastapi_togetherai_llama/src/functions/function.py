@@ -5,6 +5,32 @@ import os
 from dataclasses import dataclass
 from dotenv import load_dotenv
 from src.functions.utils.clean_div import remove_script_css
+
+@dataclass
+class InputParams_extract_code_and_cli:
+    extract_use_case_result: str
+
+
+@function.defn(name="extract_code_and_cli")
+async def extract_code_and_cli(input: InputParams_extract_code_and_cli):
+    try:
+        log.info("extract_code_and_cli function started", input=input)
+        
+        # Extract Python code
+        python_code_start = input.extract_use_case_result.find("<python>") + len("<python>")
+        python_code_end = input.extract_use_case_result.find("</python>")
+        python_code = input.extract_use_case_result[python_code_start:python_code_end].strip()
+
+        # Extract CLI command
+        cli_start = input.extract_use_case_result.find("<cli>") + len("<cli>")
+        cli_end = input.extract_use_case_result.find("</cli>")
+        cli_command = input.extract_use_case_result[cli_start:cli_end].strip()
+
+        log.info("extract_code_and_cli function completed", python_code=python_code, cli_command=cli_command)
+        return {"python_code": python_code, "cli_command": cli_command}
+    except Exception as e:
+        log.error("extract_code_and_cli function failed", error=e)
+        raise e
 from trafilatura import fetch_url, extract
 
 load_dotenv()
