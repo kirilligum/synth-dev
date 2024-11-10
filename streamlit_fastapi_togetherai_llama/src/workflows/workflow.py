@@ -1,12 +1,17 @@
 from datetime import timedelta
+
 from restack_ai.workflow import workflow, import_functions, log
 
 with import_functions():
     from src.functions.function import (
-        llm_complete,
         download_and_clean_html,
-        FunctionInputParams,
         DownloadInputParams,
+        understand_documentation,
+        InputParams_understand_documentation,
+        brainstorm_use_cases,
+        InputParams_brainstorm_use_cases,
+        extract_use_case,
+        InputParams_extract_use_case,
     )
 
 
@@ -23,11 +28,94 @@ class llm_complete_workflow:
             start_to_close_timeout=timedelta(seconds=120),
         )
         log.info("cleaned_html completed", result=cleaned_html)
-        prompt = input["prompt"]
-        result = await workflow.step(
-            llm_complete,
-            FunctionInputParams(prompt=prompt),
+
+        understand_documentation_result = await workflow.step(
+            understand_documentation,
+            InputParams_understand_documentation(
+                prompt=input["prompt"], cleaned_html=cleaned_html
+            ),
             start_to_close_timeout=timedelta(seconds=120),
         )
-        log.info("llm_complete_workflow completed", result=result)
-        return cleaned_html, result
+        log.info(
+            "understand_documentation completed", result=understand_documentation_result
+        )
+
+        brainstorm_use_cases_result = await workflow.step(
+            brainstorm_use_cases,
+            InputParams_brainstorm_use_cases(
+                cleaned_html=cleaned_html,
+                special_requirements=input["prompt"],
+                understand_documentation_result=understand_documentation_result,
+            ),
+            start_to_close_timeout=timedelta(seconds=120),
+        )
+        log.info("brainstorm_use_cases completed", result=brainstorm_use_cases_result)
+
+        i_use_case = 0
+
+        extract_use_case_result = await workflow.step(
+            extract_use_case,
+            InputParams_extract_use_case(
+                cleaned_html=cleaned_html,
+                brainstorm_use_cases_result=brainstorm_use_cases_result,
+                i_use_case=i_use_case,
+            ),
+            start_to_close_timeout=timedelta(seconds=120),
+        )
+        log.info("extract_use_case completed", result=extract_use_case_result)
+
+        # result = await workflow.step(
+        #     create_use_case,
+        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
+        #     start_to_close_timeout=timedelta(seconds=120),
+        # )
+        # log.info("brainstorm_use_cases completed", result=result)
+
+        # result = await workflow.step(
+        #     create_use_case,
+        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
+        #     start_to_close_timeout=timedelta(seconds=120),
+        # )
+        # log.info("brainstorm_use_cases completed", result=result)
+
+        # result = await workflow.step(
+        #     run_use_case,
+        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
+        #     start_to_close_timeout=timedelta(seconds=120),
+        # )
+        # log.info("brainstorm_use_cases completed", result=result)
+
+        # result = await workflow.step(
+        #     reflect,
+        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
+        #     start_to_close_timeout=timedelta(seconds=120),
+        # )
+        # log.info("brainstorm_use_cases completed", result=result)
+
+        # result = await workflow.step(
+        #     act,
+        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
+        #     start_to_close_timeout=timedelta(seconds=120),
+        # )
+        # log.info("brainstorm_use_cases completed", result=result)
+
+        # result = await workflow.step(
+        #     human,
+        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
+        #     start_to_close_timeout=timedelta(seconds=120),
+        # )
+        # log.info("brainstorm_use_cases completed", result=result)
+
+        # result = await workflow.step(
+        #     create_rag,
+        #     FunctionInputParams(cleaned_html=cleaned_html, use_case=use_case),
+        #     start_to_close_timeout=timedelta(seconds=120),
+        # )
+        # log.info("brainstorm_use_cases completed", result=result)
+
+        return (
+            cleaned_html,
+            understand_documentation_result,
+            brainstorm_use_cases_result,
+            extract_use_case_result,
+        )
