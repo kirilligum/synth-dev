@@ -54,6 +54,7 @@ class llm_complete_workflow:
         log.info("brainstorm_use_cases completed", result=brainstorm_use_cases_result)
 
         extract_use_case_results = []
+        code_and_cli_results = []
         for i_use_case in range(5):
             extract_use_case_result = await workflow.step(
                 extract_use_case,
@@ -70,8 +71,6 @@ class llm_complete_workflow:
             )
             extract_use_case_results.append(extract_use_case_result)
 
-        code_and_cli_results = []
-        for extract_use_case_result in extract_use_case_results:
             code_and_cli_result = await workflow.step(
                 extract_code_and_cli,
                 InputParams_extract_code_and_cli(
