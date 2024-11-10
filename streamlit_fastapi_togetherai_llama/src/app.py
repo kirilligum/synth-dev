@@ -39,8 +39,7 @@ async def schedule_workflow(request: PromptRequest):
         runId = await client.schedule_workflow(
             workflow_name="llm_complete_workflow",
             workflow_id=workflow_id,
-            input={"url": request.url, "prompt": request.prompt},
-            code_and_cli_results,
+            input={"url": request.url, "prompt": request.prompt}
         )
         print("Scheduled workflow", runId)
 
