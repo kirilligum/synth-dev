@@ -98,7 +98,11 @@ if st.session_state.response_history:
             )
         # Add a new expander for code_and_cli_results
         with st.expander("Code and CLI"):
-            st.text(f"**code_and_cli_result {i}:** {item['code_and_cli_results'][0]}")
+            code_and_cli = item['code_and_cli_results'][0]
+            st.markdown("**Python Code:**")
+            st.code(code_and_cli['python_code'], language='python')
+            st.markdown("**CLI Command:**")
+            st.code(code_and_cli['cli_command'], language='bash')
         st.markdown("---")
 
 st.header("Human review")
