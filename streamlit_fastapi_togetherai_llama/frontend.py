@@ -9,6 +9,7 @@ if "user_input" not in st.session_state:
     st.session_state.user_input = ""
 
 user_prompt = st.text_area("Ask the pirate any question", height=150, key="user_input")
+url_input = st.text_input("Enter the URL to download and clean", key="url_input")
 
 # Initialize response history in session state
 if "response_history" not in st.session_state:
@@ -21,7 +22,7 @@ if st.button("Generate Response"):
             # Make POST request to FastAPI backend
             response = requests.post(
                 "http://localhost:8000/api/schedule",
-                json={"prompt": user_prompt}
+                json={"prompt": user_prompt, "url": url_input}
             )
             
             if response.status_code == 200:

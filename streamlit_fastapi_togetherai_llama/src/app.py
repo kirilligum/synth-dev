@@ -9,6 +9,7 @@ import uvicorn
 @dataclass
 class PromptRequest:
     prompt: str
+    url: str
 
 app = FastAPI()
 
@@ -34,7 +35,7 @@ async def schedule_workflow(request: PromptRequest):
         runId = await client.schedule_workflow(
             workflow_name="llm_complete_workflow",
             workflow_id=workflow_id,
-            input={"prompt": request.prompt}
+            input={"prompt": request.prompt, "url": request.url}
         )
         print("Scheduled workflow", runId)
         
