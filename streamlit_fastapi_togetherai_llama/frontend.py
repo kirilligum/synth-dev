@@ -80,21 +80,21 @@ if st.session_state.clean_html:
 
 # Display response history
 if st.session_state.response_history:
-    st.subheader("Understand Documentation and Brainstorm Use Cases")
-    for i, item in enumerate(st.session_state.response_history, 1):
-        st.subheader("understand")
-        st.markdown(
-            f"**understand_documentation_result {i}:** {item['understand_documentation_result']}"
-        )
-        st.subheader("brainstorm")
-        st.markdown(
-            f"**brainstorm_use_cases_result {i}:** {item['brainstorm_use_cases_result']}"
-        )
-        st.subheader("usecase")
-        st.text(
-            f"**extract_use_case_result {i}:** {item['extract_use_case_results'][0]}"
-        )
-        st.markdown("---")
+    with st.expander("Understand Documentation and Brainstorm Use Cases"):
+        for i, item in enumerate(st.session_state.response_history, 1):
+            with st.expander(f"understand {i}"):
+                st.markdown(
+                    f"**understand_documentation_result {i}:** {item['understand_documentation_result']}"
+                )
+            with st.expander(f"brainstorm {i}"):
+                st.markdown(
+                    f"**brainstorm_use_cases_result {i}:** {item['brainstorm_use_cases_result']}"
+                )
+            with st.expander(f"usecase {i}"):
+                st.text(
+                    f"**extract_use_case_result {i}:** {item['extract_use_case_results'][0]}"
+                )
+            st.markdown("---")
 
 st.header("Human review")
 
