@@ -111,5 +111,5 @@ if st.button("Approve Examples"):
 # Display the current state of 'approve'
 st.write("Approve state:", st.session_state.approve)
 
-st.header("RAG")
+st.subheader("RAG")
 st.write("RAG:", st.session_state.rag)
