@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # Set page title and header
-st.title("Restack AI with TogetherAi + LlamaIndex")
+st.title("")
 
 # Create text area for user input with session state
 if "user_input" not in st.session_state:
@@ -71,12 +71,13 @@ if st.session_state.use_cases:
 if "approved" not in st.session_state:
     st.session_state.approve = False
 
+if "rag" not in st.session_state:
+    st.session_state.rag = ""
+
 # Create button to send request
 if st.button("approve"):
     st.session_state.approve = True
-
-# Display the current state of 'approve'
-st.write("Approve state:", st.session_state.approve)
+    st.session_state.rag = "rag.json"
     # if user_prompt:
     #     try:
     #         # Make POST request to FastAPI backend
@@ -102,3 +103,8 @@ st.write("Approve state:", st.session_state.approve)
     #         )
     # else:
     #     st.warning("Please enter a prompt before submitting.")
+
+# Display the current state of 'approve'
+st.write("Approve state:", st.session_state.approve)
+
+st.write("RAG:", st.session_state.approve)
