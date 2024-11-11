@@ -5,6 +5,7 @@ from src.functions.function import (
     understand_documentation,
     brainstorm_use_cases,
     extract_use_case,
+    extract_code_and_cli,
 )
 from src.workflows.workflow import llm_complete_workflow
 
@@ -17,6 +18,7 @@ async def main():
             understand_documentation,
             brainstorm_use_cases,
             extract_use_case,
+            extract_code_and_cli,
         ],
     )
 

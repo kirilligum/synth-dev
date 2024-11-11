@@ -121,4 +121,5 @@ class llm_complete_workflow:
             understand_documentation_result,
             brainstorm_use_cases_result,
             extract_use_case_results,
+            code_and_cli_results,
         )

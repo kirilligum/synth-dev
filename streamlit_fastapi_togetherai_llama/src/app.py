@@ -39,7 +39,7 @@ async def schedule_workflow(request: PromptRequest):
         runId = await client.schedule_workflow(
             workflow_name="llm_complete_workflow",
             workflow_id=workflow_id,
-            input={"url": request.url, "prompt": request.prompt}
+            input={"url": request.url, "prompt": request.prompt},
         )
         print("Scheduled workflow", runId)
 
@@ -59,6 +59,8 @@ async def schedule_workflow(request: PromptRequest):
             brainstorm_use_cases_result,
             "\nextract_use_case_result:",
             extract_use_case_results,
+            "\ncode_and_cli_results:",
+            code_and_cli_results,
         )
 
         return {
