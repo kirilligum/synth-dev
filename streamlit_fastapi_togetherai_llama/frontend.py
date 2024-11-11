@@ -119,7 +119,7 @@ if st.session_state.response_history:
                     )
                 )
                 st.session_state.rag.append(False)
-                if st.button(f"Submit to RAG {j}"):
+                if st.button(f"Submit to RAG {j + 1}"):
                     st.session_state.rag[j] = True
                 st.write("Submitted to RAG:", st.session_state.rag[j])
         st.markdown("---")
