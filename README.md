@@ -4,6 +4,10 @@
 
 Helping LLMs understand developer documentation by creating hundreds of diversified use case coding examples for pre-training and RAG.
 
+## Video
+
+https://youtu.be/IUzr0yr8b1o
+
 ## Problem
 
 1. AI coding assistants (Copilot, Cursor, Aider.chat) accelerate software development.
